@@ -134,7 +134,7 @@ def format_file(file: str,
             code_block_flag = not code_block_flag
             continue
 
-        elif re.match(r'   \$\$', line):
+        elif re.match(r'\$\$', line):
             if not code_block_flag:
                 if latex_block_flag is True:
                     latex_block_index[-1].append(i)
