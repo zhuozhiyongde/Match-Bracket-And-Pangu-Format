@@ -41,13 +41,13 @@ A little tool to check markdown file's bracket match and use `Pangu.js` to add s
 按照自定义导出，调整命令为
 
 ```bash
-python3 {~/path/to/BracketMatch\&PanguSpace.py} {currentPath}
+python3 ~/path/to/BracketMatch\&PanguSpace.py ${currentPath}
 ```
 
 或者
 
 ```bash
-python3 {~/path/to/BracketMatch\&PanguSpace.py} {currentFolder}
+python3 ~/path/to/BracketMatch\&PanguSpace.py ${currentFolder}
 ```
 
 
