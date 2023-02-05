@@ -8,27 +8,49 @@ A little tool to check markdown file's bracket match and use `Pangu.js` to add s
 
 ### Match Bracket
 
-1. 忽略中英文差别，逐行检查括号是否匹配，如果不匹配，提示。
-2. 如果括号匹配，按照左括号的类型对应调整右括号的语言类型。
-3. 检查所有英文左括号，如果有其左右任一为中文字符，则将其与其配对的括号替换为中文括号
+1. 忽略代码块和 LaTeX 公式块内的内容。
+2. 忽略中英文差别，逐行检查括号是否匹配，如果不匹配，提示。
+3. 如果括号匹配，按照左括号的类型对应调整右括号的语言类型。
+4. 检查所有英文左括号，如果有其左右任一为中文字符，则将其与其配对的括号替换为中文括号
 
 
 
 ### Pangu Format
 
-1. 使用 `Pangu.js` 来对文件格式化
-2. 忽略可以被正则表达式 `r'(<img src)|!\[.*?\]\(.*?\)|^\n$'` 匹配到的行。这是为了避免图片的文件路径被不正确的格式化。
-3. 去除 `Pangu.js` 错误地在加粗语法中添加的空格
-4. 修复因 `Pangu.js` 最后调用 `.strip ()` 而被移除的行首空格和行末回车
+1. 忽略代码块和 LaTeX 公式块内的内容。
+2. 使用 `Pangu.js` 来对文件格式化
+3. 忽略可以被正则表达式 `r'(<img src)|!\[.*?\]\(.*?\)|^\n$'` 匹配到的行。这是为了避免图片的文件路径被不正确的格式化。
+4. 去除 `Pangu.js` 错误地在加粗语法中添加的空格
+5. 修复因 `Pangu.js` 最后调用 `.strip ()` 而被移除的行首空格和行末回车
 
 
 
-### Other
+## Usage
 
-该脚本接收 0 或 1 个参数：
+```bash
+usage: BracketMatchAndPanguSpace.py [-h] [-r] [--no-bracket] [--no-pangu] [path]
 
-* 0 参数：默认对当前路径下所有 markdown 文件执行操作
-* 1 参数：如果为 markdown 文件，则仅对该文件执行操作；如果为路径，则对给定路径下所有 markdown 文件执行操作
+Format markdown file, including pangu format and bracket match.
+
+positional arguments:
+  path             file or directory to format
+
+options:
+  -h, --help       show this help message and exit
+  -r, --recursive  recursive format directory
+  --no-bracket     disable bracket match
+  --no-pangu       disable pangu format
+```
+
+参数说明：
+
+`path`：文件 / 文件夹路径，如果为 markdown 文件，则仅对该文件执行操作；如果为路径，则对给定路径下所有 markdown 文件执行操作。
+
+`-r`：指定此参数时，对给定的 `path` 文件夹下递归查找所有 `.md` 文件并执行操作。
+
+`--no-bracket`：不进行括号匹配操作。
+
+`--no-pangu`：不进行 `Pangu.js` 格式化的操作。
 
 
 
@@ -41,18 +63,32 @@ A little tool to check markdown file's bracket match and use `Pangu.js` to add s
 按照自定义导出，调整命令为
 
 ```bash
-python3 ~/path/to/BracketMatch\&PanguSpace.py ${currentPath}
+python3 ~/path/to/BracketMatchAndPanguSpace.py ${currentPath}
 ```
 
 或者
 
 ```bash
-python3 ~/path/to/BracketMatch\&PanguSpace.py ${currentFolder}
+python3 ~/path/to/BracketMatchAndPanguSpace.py ${currentFolder}
 ```
 
 
 
 当然，你可以在去 `系统设置 - 键盘 - 键盘快捷键 - App 快捷键` 内为这个命令设定快捷键。
 
-如果你不希望有输出，你可以使用快捷指令来通过 shell 运行此脚本。
+
+
+### For Shortcuts
+
+如果你不希望有输出，你可以使用 `快捷指令` 来通过 shell 运行此脚本。
+
+以下是一个例子：
+
+```bash
+source ~/.zshrc && python3 /path/to/BracketMatchAndPanguSpace.py /targetPath
+```
+
+![Cleanshot-2023-02-06-at-01.07.53](./README.assets/Cleanshot-2023-02-06-at-01.07.53.png)
+
+
 

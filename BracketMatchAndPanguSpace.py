@@ -1,13 +1,12 @@
 # -*- encoding: utf-8 -*-
 #@Author  :   Arthals
-#@File    :   BracketMatch&PanguSpace.py
+#@File    :   BracketMatchAndPanguSpace.py
 #@Time    :   2023/02/02 20:35:56
 #@Contact :   zhuozhiyongde@126.com
 #@Software:   Visual Studio Code
 
 import re
 import os
-import sys
 import pangu
 import argparse
 
