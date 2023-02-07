@@ -90,13 +90,13 @@ def pangu_format_line(line: str) -> str:
     pattern = re.compile(r'(?<=\*\*)[^\*]*?(?=\*\*)')
     new_line = pattern.sub(lambda x: x.group().strip(), new_line)
 
-    # Pangu.js 最后调用了 .strip() 方法，导致最后一行的换行符被去除，这里补上
+    # Pangu.js 最后调用了 .strip() 方法，还会移除行首空格，这里补上
+    if re.match(r' +', line):
+        new_line = re.match(r' +', line).group() + re.sub(r'^ +', '', new_line)
+
+    # 同上原因，导致最后一行的换行符被去除，这里补上
     if not new_line.endswith('\n'):
         new_line += '\n'
-
-    # 同上原因，还会移除行首空格，这里补上
-    if re.match(r' +', line):
-        new_line = re.match(r' +', line).group() + new_line.lstrip()
 
     return new_line
 
