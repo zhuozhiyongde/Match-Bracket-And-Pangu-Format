@@ -82,16 +82,17 @@ def process_text(origin_text: str, do_match_brackets: bool,
 
         return new_text
 
-    def find_inline_latex(text: str):
+    def find_inline_latex_and_code(text: str):
         latex_blocks = re.compile(
-            r'(?s)(?<!\\)\$\$(.*?)(?<!\\)\$\$|(?<!\\)\$(.*?)(?<!\\)\$')
+            r'(?s)(?<!\\)\$\$(.*?)(?<!\\)\$\$|(?<!\\)\$(.*?)(?<!\\)\$|(?<!\\)`(.*?)(?<!\\)`'
+        )
         return [(m.start(), m.end()) for m in latex_blocks.finditer(text)]
 
     text = origin_text
     return_result = [0, 0, origin_text]
 
     # 存储所有的latex块
-    latex_blocks = find_inline_latex(text)
+    latex_blocks = find_inline_latex_and_code(text)
     latex_map = {}
     seprated_text = []
     start = 0
@@ -130,8 +131,12 @@ def process_text(origin_text: str, do_match_brackets: bool,
     # 处理 pangu.js
     if do_pangu_format:
         result = []
+        tmp_text = '$__latex__or__code__part__$'.join(seprated_text)
+        tmp_text = pangu.spacing_text(tmp_text)
+        seprated_text = tmp_text.split('$__latex__or__code__part__$')
+
         for index in range(len(seprated_text)):
-            result.append(pangu.spacing_text(seprated_text[index]))
+            result.append(seprated_text[index])
             if index in latex_map:
                 result.append(latex_map[index])
 
@@ -140,10 +145,10 @@ def process_text(origin_text: str, do_match_brackets: bool,
         # 去除 Pangu.js 错误的在加粗语法**text**中添加的空格
         pattern = re.compile(r'(?<=\*\*)[^\*]*?(?=\*\*)')
         text = pattern.sub(lambda x: x.group().strip(), text)
-        pattern = re.compile(r' *(\*\*[^\*]*?\*\*) *')
-        text = pattern.sub(' \\1 ', text)
-        text = re.sub(r'^ \*\*', '**', text)
-        text = re.sub(r'\*\* $', '**', text)
+
+        # Pangu.js 最后调用了 .strip() 方法，会移除行首空格，这里补上
+        if re.match(r' +', origin_text):
+            text = re.match(r' +', origin_text).group() + text.lstrip()
 
         # 同上原因，导致最后一行的换行符被去除，这里补上
         if not text.endswith('\n'):
