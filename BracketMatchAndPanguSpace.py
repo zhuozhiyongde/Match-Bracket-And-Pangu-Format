@@ -105,7 +105,7 @@ def format_file(file: str,
                 show_info: bool = True,
                 do_bracket_format: bool = True,
                 do_pangu_format: bool = True):
-    if not file.endswith('.md'):
+    if not file.endswith(('.md', 'markdown')):
         return False
 
     if not do_bracket_format and not do_pangu_format:
@@ -235,7 +235,7 @@ if __name__ == '__main__':
     do_bracket = not args.no_bracket
     do_pangu = not args.no_pangu
 
-    if path.endswith('.md'):
+    if path.endswith(('.md', '.markdown')):
         format_file(path,
                     do_bracket_format=do_bracket,
                     do_pangu_format=do_pangu)
@@ -245,7 +245,7 @@ if __name__ == '__main__':
             md_files = []
             for root, dirs, files in os.walk(path):
                 for file in files:
-                    if file.endswith('.md'):
+                    if file.endswith(('.md', '.markdown')):
                         md_files.append(os.path.join(root, file))
             print('Detect %d markdown files' % len(md_files))
             for file in md_files:
@@ -255,7 +255,7 @@ if __name__ == '__main__':
                             do_pangu_format=do_pangu)
         else:
             md_files = [
-                file for file in os.listdir(path) if file.endswith('.md')
+                file for file in os.listdir(path) if file.endswith(('.md', '.markdown'))
             ]
             for file in md_files:
                 format_file(os.path.join(path, file),
