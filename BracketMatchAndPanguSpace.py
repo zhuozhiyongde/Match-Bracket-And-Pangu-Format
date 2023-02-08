@@ -154,8 +154,10 @@ def process_text(origin_text: str, do_match_brackets: bool,
         if not text.endswith('\n'):
             text += '\n'
 
-        if text != origin_text:
+        if len(text) != len(origin_text):
             return_result[1] = 1
+
+        if text != origin_text:
             return_result[2] = text
 
     return return_result
@@ -185,9 +187,6 @@ def format_file(file: str,
     for i in range(len(lines)):
         line = lines[i]
         # 忽略图片行、空行
-        # print((line, re.match(r'\$\$',
-        #                       line), re.match(r'\$\$.*\$\$',
-        #                                       line), latex_block_flag))
         pattern = re.compile(r'(<img src)|!\[.*?\]\(.*?\)|^\n$')
         if pattern.search(line):
             continue
@@ -198,7 +197,7 @@ def format_file(file: str,
 
         elif re.match(r'\$\$', line) or re.search(r'\$\$\n?$', line):
             if not code_block_flag:
-                if re.match(r'\$\$.*\$\$', line):
+                if re.search(r'\$\$.*\$\$', line):
                     continue
                 latex_block_flag = not latex_block_flag
                 continue
