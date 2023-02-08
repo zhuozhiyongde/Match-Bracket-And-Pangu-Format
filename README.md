@@ -8,7 +8,7 @@ A little tool to check markdown file's bracket match and use `Pangu.js` to add s
 
 ### Match Bracket
 
-1. 忽略代码块和 LaTeX 公式块（包括行内代码和行内LaTeX公式）内的内容。
+1. 忽略代码块和 LaTeX 公式块（包括行内代码和行内 LaTeX 公式）内的内容。
 2. 忽略中英文差别，逐行检查括号是否匹配，如果不匹配，提示。
 3. 如果括号匹配，按照左括号的类型对应调整右括号的语言类型。
 4. 检查所有英文左括号，如果有其左右任一为中文字符，则将其与其配对的括号替换为中文括号。
@@ -17,7 +17,7 @@ A little tool to check markdown file's bracket match and use `Pangu.js` to add s
 
 ### Pangu Format
 
-1. 忽略代码块和 LaTeX 公式块（包括行内代码和行内LaTeX公式）内的内容。
+1. 忽略代码块和 LaTeX 公式块（包括行内代码和行内 LaTeX 公式）内的内容。
 2. 使用 `Pangu.js` 来对文件格式化。
 3. 忽略可以被正则表达式 `r'(<img src)|!\[.*?\]\(.*?\)|^\n$'` 匹配到的行。这是为了避免图片的文件路径被不正确的格式化。
 4. 去除 `Pangu.js` 错误地在加粗语法中添加的空格。

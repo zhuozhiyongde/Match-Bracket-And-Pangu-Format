@@ -181,13 +181,13 @@ def format_file(file: str,
     do_bracket_flag = False
     do_pangu_flag = False
     error_match_flag = False
-    for i in range(len(lines)):
-        # 忽略代码块和行内公式
-        if code_block_flag or latex_block_flag:
-            continue
 
+    for i in range(len(lines)):
         line = lines[i]
         # 忽略图片行、空行
+        # print((line, re.match(r'\$\$',
+        #                       line), re.match(r'\$\$.*\$\$',
+        #                                       line), latex_block_flag))
         pattern = re.compile(r'(<img src)|!\[.*?\]\(.*?\)|^\n$')
         if pattern.search(line):
             continue
@@ -196,14 +196,18 @@ def format_file(file: str,
             code_block_flag = not code_block_flag
             continue
 
-        elif re.match(r'\$\$', line):
+        elif re.match(r'\$\$', line) or re.search(r'\$\$\n?$', line):
             if not code_block_flag:
                 if re.match(r'\$\$.*\$\$', line):
-                    print(line)
                     continue
                 latex_block_flag = not latex_block_flag
                 continue
 
+        # 忽略代码块和行内公式
+        if code_block_flag or latex_block_flag:
+            continue
+
+        # print('formatting line %d' % (i + 1))
         result = process_text(line, do_match_brackets, do_pangu_format)
 
         if result[0] == -1:
