@@ -84,7 +84,7 @@ def process_text(origin_text: str, do_match_brackets: bool,
 
     def find_inline_latex_and_code(text: str):
         latex_blocks = re.compile(
-            r'(?s)(?<!\\)\$\$(.*?)(?<!\\)\$\$|(?<!\\)\$(.*?)(?<!\\)\$|(?<!\\)`(.*?)(?<!\\)`'
+            r'(?s)(?<!\\)\$\$(.*?)(?<!\\)\$\$|(?<!\\)\$(.*?)(?<!\\)\$|(?<!\\)`(.*?)(?<!\\)`|\[.*?\]\(.*?\)'
         )
         return [(m.start(), m.end()) for m in latex_blocks.finditer(text)]
 
