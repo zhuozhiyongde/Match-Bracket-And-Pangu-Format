@@ -34,6 +34,11 @@ def process_text(origin_text: str, do_match_brackets: bool,
         list[2] : str, 处理后文本
     '''
 
+    def remove_space_between_chinese(origin_text: str) -> str:
+        # 去除中文之间的空格
+        pattern = re.compile(r'(?<=[\u4e00-\u9fff]) +(?=[\u4e00-\u9fff])')
+        return pattern.sub('', origin_text)
+
     def match_brackets(origin_text: str) -> str:
         # 将所有中文圆括号替换为英文圆括号
         text = origin_text.replace('（', '(').replace('）', ')')
@@ -114,6 +119,7 @@ def process_text(origin_text: str, do_match_brackets: bool,
         seprated_text_lens = [len(s) for s in seprated_text]
 
         text = ''.join(seprated_text)
+        text = remove_space_between_chinese(text)
         text = match_brackets(text)
 
         if text is False:
