@@ -89,6 +89,7 @@ def process_text(
         return new_text
 
     text = origin_text
+    print(f"Origin: {origin_text}")
     return_result = [0, 0, origin_text]
 
     # 存储所有的latex块
@@ -107,10 +108,12 @@ def process_text(
         # save seperated text lens
 
         text = remove_space_between_chinese(text)
+        print(f"Removed space: {text}")
         text = match_brackets(text)
 
         if text is False:
             return_result[0] = -1
+            return return_result
 
         # restore seperated text
         else:
@@ -185,6 +188,7 @@ def format_file(
     do_bracket_flag = False
     do_pangu_flag = False
     error_match_flag = False
+    error_match_list = []
 
     for i in range(len(lines)):
         line = lines[i]
@@ -209,12 +213,18 @@ def format_file(
             continue
 
         # print('formatting line %d' % (i + 1))
-        result = process_text(line, do_match_brackets, do_pangu_format)
+        try:
+            result = process_text(line, do_match_brackets, do_pangu_format)
+        except Exception as e:
+            print("File: %s Error line: %s" % (file, line))
+            print(e)
+            raise e
 
         if result[0] == -1:
             print("File: %s Match brackets Error, line: %d" % (file, i + 1))
             print("File: %s Error line: %s" % (file, line))
             error_match_flag = True
+            error_match_list.append(i + 1)
 
         if result[0] == 1:
             # print("File: %s, line: %d brackets matched" % (file, i + 1))
@@ -232,10 +242,10 @@ def format_file(
     # print result
     print("Summary for File: %s" % file)
     if error_match_flag:
-        print("File: %s Match brackets Error" % file)
-    if do_bracket_flag:
+        print("File: %s Match brackets Error in %s" % (file, error_match_list))
+    if do_bracket_flag and not error_match_flag:
         print("File: %s Match brackets Success" % file)
-    else:
+    elif not do_match_brackets and not error_match_flag:
         print("File: %s Match brackets No need" % file)
     if do_pangu_flag:
         print("File: %s Pangu format Success" % file)
